@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apps-project2
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: development
+    server: https://kubernetes.default.svc
+  project: project2
+  source:
+    path: apps/project2
+    repoURL: https://github.com/sergioarmgpl/IDPKCDColombia2023
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: true
