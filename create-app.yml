@@ -1,0 +1,74 @@
+name: Create App
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        type: choice
+        description: ArgoCD project
+        options:
+        - project1
+        - project2
+      app-name:
+        required: true
+        type: string
+        description: Application name
+      message:
+        required: true
+        type: string
+        description: Message to show
+jobs:
+  create-argo-app:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Clone Repo
+      uses: actions/checkout@v3
+      with:
+        repository: sergioarmgpl/IDPKCDColombia2023
+        ref: main
+
+    - name: Create Application Definition
+      id: create-application-definition
+      run: |
+        cat <<EOF > apps/${{ inputs.project }}/${{ inputs.app-name }}.yaml
+        apiVersion: argoproj.io/v1alpha1
+        kind: Application
+        metadata:
+          name: ${{ inputs.app-name }}
+          namespace: argocd
+          finalizers:
+          - resources-finalizer.argocd.argoproj.io
+        spec:
+          destination:
+            namespace: development
+            server: https://kubernetes.default.svc
+          project: ${{ inputs.project }}
+          source:
+            path: templates/template1
+            repoURL: https://github.com/sergioarmgpl/IDPKCDColombia2023
+            targetRevision: HEAD
+            helm:
+              values: |
+                appname: ${{ inputs.app-name }}
+                dockerImage: czdev/myapp
+                namespace: development
+                message: "${{ inputs.message }}"
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+        EOF
+
+    - name: Getting timestamp for PR
+      run: |
+        echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: Creating ArgoCD Application
+        title: Create ArgoCD Application ${{ inputs.app-name }}
+        body: "Creating ArgoCD Application ${{ inputs.app-name }} in development"
+        branch: argocd-apps/app-create-${{ env.TIMESTAMP }}
+        delete-branch: true
+        reviewers: sergioarmgpl
