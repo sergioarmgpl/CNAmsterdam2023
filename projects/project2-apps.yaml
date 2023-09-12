@@ -12,7 +12,7 @@ spec:
   project: project2
   source:
     path: apps/project2
-    repoURL: https://github.com/sergioarmgpl/IDPKCDColombia2023
+    repoURL: https://github.com/sergioarmgpl/CNAmsterdam2023
     targetRevision: HEAD
   syncPolicy:
     automated:

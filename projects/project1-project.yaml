@@ -8,7 +8,7 @@ metadata:
 spec:
   description: Project1
   sourceRepos:
-  - 'https://github.com/sergioarmgpl/IDPKCDColombia2023.git'
+  - 'https://github.com/sergioarmgpl/CNAmsterdam2023'
   destinations:
   - namespace: development
     server: https://kubernetes.default.svc
