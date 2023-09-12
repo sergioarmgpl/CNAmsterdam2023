@@ -24,7 +24,7 @@ jobs:
     - name: Clone Repo
       uses: actions/checkout@v3
       with:
-        repository: sergioarmgpl/IDPKCDColombia2023
+        repository: sergioarmgpl/CNAmsterdam2023
         ref: main
 
     - name: Create Application Definition
@@ -45,7 +45,7 @@ jobs:
           project: ${{ inputs.project }}
           source:
             path: templates/template1
-            repoURL: https://github.com/sergioarmgpl/IDPKCDColombia2023
+            repoURL: https://github.com/sergioarmgpl/CNAmsterdam2023
             targetRevision: HEAD
             helm:
               values: |
